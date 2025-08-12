@@ -1,0 +1,66 @@
+{
+  "version": 2,
+  "name": "ai-chat-app",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_AMPLIFY_PROJECT_NAME": "@amplify-project-name",
+    "NEXT_PUBLIC_AMPLIFY_PROJECT_ENV": "@amplify-project-env",
+    "AWS_REGION": "@aws-region",
+    "BEDROCK_ENABLED": "@bedrock-enabled",
+    "BEDROCK_MODEL_IDS": "@bedrock-model-ids",
+    "BEDROCK_RATE_LIMIT_REQUESTS": "@bedrock-rate-limit-requests",
+    "BEDROCK_RATE_LIMIT_WINDOW_MS": "@bedrock-rate-limit-window-ms"
+  },
+  "functions": {
+    "src/app/api/chat/route.ts": {
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/chat",
+      "destination": "/chat"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/chat",
+      "permanent": false
+    }
+  ]
+}
